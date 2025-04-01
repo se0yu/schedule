@@ -1,5 +1,6 @@
 package com.example.schedule.service;
 
+import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.SignUpResponseDto;
 import com.example.schedule.dto.UserResponseDto;
 import com.example.schedule.entity.User;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+
+//custom exception 만들것
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +31,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public LoginResponseDto login(String username, String password) {
+
+        //조회되는 아이디 없을 경우 오류
+        User user = userRepository.findByUsernameAndPassword(username,password)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"아이디와 비밀번호를 다시 확인해주세요."));
+
+
+        return new LoginResponseDto(user.getId(),user.getUsername());
+    }
+
+
+    @Override
     public UserResponseDto findUserById(Long id) {
 
-        Optional<User> optionalUser = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 아이디입니다."));
 
-        if(optionalUser.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 아이디입니다.");
-        }
-
-        User user = optionalUser.get();
         return new UserResponseDto(user.getUsername(), user.getEmail());
     }
 
