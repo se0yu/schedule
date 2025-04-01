@@ -25,7 +25,6 @@ public class UserController {
                                     HttpServletRequest request
             ){
         LoginResponseDto loginResponseDto = userService.login(requestDto.getUsername(),requestDto.getPassword());
-//        Long userId = responseDto.getId();
 
         HttpSession session = request.getSession();
         session.setAttribute(Const.LOGIN_USER,loginResponseDto);
@@ -34,6 +33,18 @@ public class UserController {
         return new ResponseEntity<>(loginResponseDto,HttpStatus.OK);
     }
 
+    //로그아웃 기능
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        session.invalidate();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     //회원가입 기능
     @PostMapping("/signup")
