@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService{
@@ -32,6 +34,15 @@ public class ScheduleServiceImpl implements ScheduleService{
                                         schedule.getCreatedAt(),
                                         schedule.getUpdatedAt()
                 );
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules() {
+
+        List<ScheduleResponseDto> scheduleList = scheduleRepository.findAll().stream()
+                                                .map(ScheduleResponseDto::toDto)
+                                                .toList();
+        return scheduleList;
     }
 
     @Override
