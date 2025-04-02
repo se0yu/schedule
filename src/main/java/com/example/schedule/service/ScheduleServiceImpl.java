@@ -10,6 +10,7 @@ import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     //일정 생성
     @Override
+    @Transactional
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto, Long userId) {
 
         //로그인한 유저의 정보 가져오기
@@ -73,6 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     //일정 수정
     @Override
+    @Transactional
     public ScheduleResponseDto updateSchedule(Long id,ScheduleRequestDto requestDto, Long userId) {
 
         //id값에 해당하는 일정 데이터 가져오기
@@ -106,6 +109,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional
     public void deleteSchedule(LoginResponseDto loginUser, Long id) {
 
         //id값에 해당하는 일정 데이터 가져오기

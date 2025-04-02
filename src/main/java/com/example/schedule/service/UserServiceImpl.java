@@ -9,6 +9,7 @@ import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -24,12 +25,15 @@ public class UserServiceImpl implements UserService{
 
     //회원가입
     @Override
+    @Transactional
     public SignUpResponseDto signUp(String username, String email, String password){
 
         User user = new User(username,email, password);
         User savedUser = userRepository.save(user);
 
-        return new SignUpResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        return new SignUpResponseDto(savedUser.getId(),
+                                    savedUser.getUsername(),
+                                    savedUser.getEmail());
     }
 
 
@@ -37,11 +41,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public LoginResponseDto login(LoginRequestDto requestDto) {
 
-
         //일치하는 아이디, 비밀번호 없을 경우 오류
         User user = userRepository.findByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"아이디와 비밀번호를 다시 확인해주세요."));
-
 
         return new LoginResponseDto(user.getId(),user.getUsername());
     }
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService{
 
     //회원탈퇴
     @Override
+    @Transactional
     public void signOut(Long id, String password) {
 
         Optional<User> optionalUser = userRepository.findById(id);
