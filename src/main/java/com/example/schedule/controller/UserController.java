@@ -43,9 +43,9 @@ public class UserController {
         HttpSession session = request.getSession(false);
 
         //로그인 하지 않은 상태로 접근할 시 오류 출력
-        if(session == null){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+//        if(session == null){
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
         //서버 세션 삭제
         session.invalidate();
 
@@ -70,6 +70,7 @@ public class UserController {
                 );
         return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
     }
+
 
 
 

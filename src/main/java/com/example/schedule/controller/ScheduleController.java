@@ -30,9 +30,7 @@ public class ScheduleController {
 
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
 
-        if (loginUser == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+
 
         ScheduleResponseDto responseDto= scheduleService.saveSchedule(requestDto,loginUser.getId());
             return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
@@ -66,9 +64,6 @@ public class ScheduleController {
     ){
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
 
-        if (loginUser == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
 
         ScheduleResponseDto responseDto= scheduleService.updateSchedule(id,requestDto,loginUser.getId());
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
@@ -82,9 +77,6 @@ public class ScheduleController {
             ){
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
 
-        if (loginUser == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
         scheduleService.deleteSchedule(loginUser,id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
