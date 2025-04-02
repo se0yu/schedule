@@ -85,6 +85,21 @@ public class UserController {
 
 
     //특정 유저 정보 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDto> updateUserById(
+            HttpServletRequest httpServletRequest,
+            @PathVariable Long id,
+            @RequestBody UpdateUserRequestDto requestDto
+    ){
+        //호출된 유저 정보와 로그인한 유저 정보가 일치하는지 확인
+        LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
+        if(!loginUser.getId().equals(id)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        UserResponseDto userResponseDto = userService.updateUser(id,requestDto);
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
 
 
     //회원탈퇴

@@ -1,9 +1,6 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.LoginRequestDto;
-import com.example.schedule.dto.LoginResponseDto;
-import com.example.schedule.dto.SignUpResponseDto;
-import com.example.schedule.dto.UserResponseDto;
+import com.example.schedule.dto.*;
 
 public interface UserService {
 
@@ -11,8 +8,9 @@ public interface UserService {
 
     LoginResponseDto login(LoginRequestDto requestDto);
 
-
     UserResponseDto findUserById(Long id);
 
     void signOut(Long id, String password);
+
+    UserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto);
 }

@@ -1,9 +1,6 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.LoginRequestDto;
-import com.example.schedule.dto.LoginResponseDto;
-import com.example.schedule.dto.SignUpResponseDto;
-import com.example.schedule.dto.UserResponseDto;
+import com.example.schedule.dto.*;
 import com.example.schedule.entity.User;
 import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +53,24 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(id)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 아이디입니다."));
 
-        return new UserResponseDto(user.getUsername(), user.getEmail());
+        return new UserResponseDto(user.getId(),user.getUsername(), user.getEmail(),user.getCreatedAt(),user.getUpdatedAt());
+    }
+
+    //유저 정보 수정
+    @Override
+    @Transactional
+    public UserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto) {
+        //해당 유저 데이터 존재 여부 확인&불러오기
+        User savedUser = userRepository.findById(id)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"아이디와 비밀번호를 다시 확인해주세요."));
+
+        savedUser.updateUser(requestDto.getUsername(),requestDto.getEmail(),requestDto.getPassword());
+
+        return new UserResponseDto(savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getCreatedAt(),
+                savedUser.getUpdatedAt());
     }
 
     //회원탈퇴
