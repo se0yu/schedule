@@ -1,7 +1,6 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.CreateScheduleRequestDto;
-import com.example.schedule.dto.CreateScheduleResponseDto;
+import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.entity.User;
@@ -46,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public CreateScheduleResponseDto saveSchedule(CreateScheduleRequestDto requestDto, Long userId) {
+    public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto, Long userId) {
 
         User loginUser = userRepository.findById(userId).
                 orElseThrow(() -> new RuntimeException("User not found"));
@@ -54,7 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents(), loginUser);
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new CreateScheduleResponseDto(savedSchedule.getId(),
+        return new ScheduleResponseDto(savedSchedule.getId(),
                                             savedSchedule.getTitle(),
                                             savedSchedule.getContents(),
                                             savedSchedule.getUser().getUsername(),

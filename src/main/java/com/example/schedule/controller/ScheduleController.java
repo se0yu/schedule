@@ -1,7 +1,7 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.common.Const;
-import com.example.schedule.dto.CreateScheduleRequestDto;
+import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.CreateScheduleResponseDto;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleResponseDto;
@@ -24,9 +24,9 @@ public class ScheduleController {
 
     //일정 생성 기능
     @PostMapping
-    public ResponseEntity<CreateScheduleResponseDto> saveSchedule (
+    public ResponseEntity<ScheduleResponseDto> saveSchedule (
             HttpServletRequest httpServletRequest,
-            @RequestBody CreateScheduleRequestDto requestDto
+            @RequestBody ScheduleRequestDto requestDto
             ){
 
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
@@ -35,7 +35,7 @@ public class ScheduleController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        CreateScheduleResponseDto responseDto= scheduleService.saveSchedule(requestDto,loginUser.getId());
+        ScheduleResponseDto responseDto= scheduleService.saveSchedule(requestDto,loginUser.getId());
             return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
 
@@ -58,4 +58,9 @@ public class ScheduleController {
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 
+    //일정 수정 기능
+    @PatchMapping
+    public ResponseEntity<ScheduleResponseDto> upadateSchedule(){
+
+    }
 }
