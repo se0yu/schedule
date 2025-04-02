@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -82,11 +81,6 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule savedSchedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글입니다."));
 
-        //createaAt이 update되지 않아 null로 출력되는 문제 발생
-        //createdAt 변수에 따로 담아 dto에 넣어줌
-        //추후에 수정 필요
-        LocalDateTime createdAt = savedSchedule.getCreatedAt();
-
         //로그인한 유저의 데이터 가져오기
         User loginUser = userRepository.findById(userId)
                         .orElseThrow(() -> new RuntimeException("User not found"));
@@ -95,15 +89,15 @@ public class ScheduleServiceImpl implements ScheduleService{
         if(!loginUser.getId().equals(savedSchedule.getUser().getId())){
             throw new RuntimeException("작성자가 아닙니다.");
         }
-        Schedule schedule = new Schedule(id,requestDto.getTitle(),requestDto.getContents(), loginUser);
-        Schedule updatedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(updatedSchedule.getId(),
-                updatedSchedule.getTitle(),
-                updatedSchedule.getContents(),
-                updatedSchedule.getUser().getUsername(),
-                createdAt,
-                updatedSchedule.getUpdatedAt()
+        savedSchedule.updateSchedule(requestDto.getTitle(), requestDto.getContents());
+
+        return new ScheduleResponseDto(savedSchedule.getId(),
+                savedSchedule.getTitle(),
+                savedSchedule.getContents(),
+                savedSchedule.getUser().getUsername(),
+                savedSchedule.getCreatedAt(),
+                savedSchedule.getUpdatedAt()
 
         );
     }
