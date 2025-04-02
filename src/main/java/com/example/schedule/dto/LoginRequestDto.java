@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 public class LoginRequestDto {
 
     @NotBlank
-    private final String username;
+    private final String email;
 
     @NotNull
     private final String password;
