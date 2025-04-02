@@ -2,7 +2,6 @@ package com.example.schedule.controller;
 
 import com.example.schedule.common.Const;
 import com.example.schedule.dto.ScheduleRequestDto;
-import com.example.schedule.dto.CreateScheduleResponseDto;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.service.ScheduleService;
@@ -58,9 +57,20 @@ public class ScheduleController {
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 
-    //일정 수정 기능
-    @PatchMapping
-    public ResponseEntity<ScheduleResponseDto> upadateSchedule(){
+    //일정 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> upadateSchedule(
+            HttpServletRequest httpServletRequest,
+            @PathVariable Long id,
+            @RequestBody ScheduleRequestDto requestDto
+    ){
+        LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
 
+        if (loginUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        ScheduleResponseDto responseDto= scheduleService.updateSchedule(id,requestDto,loginUser.getId());
+        return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 }
