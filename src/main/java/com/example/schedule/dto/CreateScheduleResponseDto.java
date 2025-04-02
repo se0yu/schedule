@@ -13,5 +13,6 @@ public class CreateScheduleResponseDto {
 
     private final String contents;
 
+    private final String username;
 
 }

@@ -1,5 +1,6 @@
 package com.example.schedule.service;
 
+import com.example.schedule.dto.LoginRequestDto;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.SignUpResponseDto;
 import com.example.schedule.dto.UserResponseDto;
@@ -31,10 +32,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public LoginResponseDto login(String username, String password) {
+    public LoginResponseDto login(LoginRequestDto requestDto) {
 
-        //조회되는 아이디 없을 경우 오류
-        User user = userRepository.findByUsernameAndPassword(username,password)
+
+        //일치하는 아이디, 비밀번호 없을 경우 오류
+        User user = userRepository.findByUsernameAndPassword(requestDto.getUsername(), requestDto.getPassword())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"아이디와 비밀번호를 다시 확인해주세요."));
 
 

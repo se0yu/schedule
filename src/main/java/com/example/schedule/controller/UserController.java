@@ -26,7 +26,8 @@ public class UserController {
             @Valid @RequestBody LoginRequestDto requestDto,
                                     HttpServletRequest request
             ){
-        LoginResponseDto loginResponseDto = userService.login(requestDto.getUsername(),requestDto.getPassword());
+
+        LoginResponseDto loginResponseDto = userService.login(requestDto);
 
         HttpSession session = request.getSession();
         session.setAttribute(Const.LOGIN_USER,loginResponseDto);
@@ -43,7 +44,7 @@ public class UserController {
 
         //로그인 하지 않은 상태로 접근할 시 오류 출력
         if(session == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //서버 세션 삭제
         session.invalidate();

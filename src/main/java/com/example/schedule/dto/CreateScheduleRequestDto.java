@@ -11,6 +11,5 @@ public class CreateScheduleRequestDto {
 
     private final String contents;
 
-    private final String username;
 
 }

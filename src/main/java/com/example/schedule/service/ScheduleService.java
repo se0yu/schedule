@@ -1,8 +1,9 @@
 package com.example.schedule.service;
 
+import com.example.schedule.dto.CreateScheduleRequestDto;
 import com.example.schedule.dto.CreateScheduleResponseDto;
 
 public interface ScheduleService {
 
-    CreateScheduleResponseDto saveSchedule(String title, String contents);
+    CreateScheduleResponseDto saveSchedule(CreateScheduleRequestDto requestDto, Long userId);
 }
