@@ -11,6 +11,7 @@ public interface UserService {
 
     LoginResponseDto login(LoginRequestDto requestDto);
 
+
     UserResponseDto findUserById(Long id);
 
     void signOut(Long id, String password);

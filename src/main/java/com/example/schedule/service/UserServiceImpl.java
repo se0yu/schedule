@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
 
+    //회원가입
     @Override
     public SignUpResponseDto signUp(String username, String email, String password){
 
@@ -31,6 +32,8 @@ public class UserServiceImpl implements UserService{
         return new SignUpResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
     }
 
+
+    //로그인
     @Override
     public LoginResponseDto login(LoginRequestDto requestDto) {
 
@@ -44,6 +47,7 @@ public class UserServiceImpl implements UserService{
     }
 
 
+    //유저 단일 조회
     @Override
     public UserResponseDto findUserById(Long id) {
 
@@ -53,6 +57,7 @@ public class UserServiceImpl implements UserService{
         return new UserResponseDto(user.getUsername(), user.getEmail());
     }
 
+    //회원탈퇴
     @Override
     public void signOut(Long id, String password) {
 

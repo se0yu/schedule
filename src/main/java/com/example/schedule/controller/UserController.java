@@ -71,12 +71,6 @@ public class UserController {
         return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
     }
 
-    //유저 목록 조회
-//    @GetMapping
-//    public ResponseEntity<List<UserResponseDto>> findAllUser(){
-//
-//
-//    }
 
 
     //특정 유저 조회(이름, 이메일)

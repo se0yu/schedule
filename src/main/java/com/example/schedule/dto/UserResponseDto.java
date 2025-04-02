@@ -13,4 +13,5 @@ public class UserResponseDto {
         this.username = username;
         this.email = email;
     }
+
 }
