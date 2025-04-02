@@ -1,5 +1,6 @@
 package com.example.schedule.service;
 
+import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
@@ -102,5 +103,19 @@ public class ScheduleServiceImpl implements ScheduleService{
                 updatedSchedule.getUpdatedAt()
 
         );
+    }
+
+    @Override
+    public void deleteSchedule(LoginResponseDto loginUser, Long id) {
+
+        //id값에 해당하는 일정 데이터 가져오기
+        Schedule savedSchedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시글입니다."));
+
+        //로그인한 유저와 작성자가 동일하지 않을 경우 에러 출력
+        if(!loginUser.getId().equals(savedSchedule.getUser().getId())){
+            throw new RuntimeException("작성자가 아닙니다.");
+        }
+        scheduleRepository.deleteById(id);
     }
 }

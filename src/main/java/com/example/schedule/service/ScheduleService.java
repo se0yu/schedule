@@ -1,5 +1,6 @@
 package com.example.schedule.service;
 
+import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 
@@ -14,4 +15,6 @@ public interface ScheduleService {
     ScheduleResponseDto findScheduleById(Long id);
 
     ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, Long userId);
+
+    void deleteSchedule(LoginResponseDto loginUser, Long id);
 }

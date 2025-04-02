@@ -73,4 +73,19 @@ public class ScheduleController {
         ScheduleResponseDto responseDto= scheduleService.updateSchedule(id,requestDto,loginUser.getId());
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
+
+    //일정 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSchedule(
+            HttpServletRequest httpServletRequest,
+            @PathVariable Long id
+            ){
+        LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
+
+        if (loginUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        scheduleService.deleteSchedule(loginUser,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
