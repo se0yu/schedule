@@ -1,8 +1,10 @@
 package com.example.schedule.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class SignUpResponseDto {
     private final Long id;
 
@@ -10,9 +12,5 @@ public class SignUpResponseDto {
 
     private final String email;
 
-    public SignUpResponseDto(Long id, String username, String email) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-    }
+
 }

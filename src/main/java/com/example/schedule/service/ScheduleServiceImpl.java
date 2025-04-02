@@ -28,7 +28,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         return new ScheduleResponseDto(schedule.getId(),
                                         schedule.getTitle(),
                                         schedule.getContents(),
-                                        schedule.getUser().getUsername());
+                                        schedule.getUser().getUsername(),
+                                        schedule.getCreatedAt(),
+                                        schedule.getUpdatedAt()
+                );
     }
 
     @Override
@@ -43,6 +46,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         return new CreateScheduleResponseDto(savedSchedule.getId(),
                                             savedSchedule.getTitle(),
                                             savedSchedule.getContents(),
-                                            savedSchedule.getUser().getUsername());
+                                            savedSchedule.getUser().getUsername(),
+                                            savedSchedule.getCreatedAt(),
+                                            savedSchedule.getUpdatedAt()
+
+        );
     }
 }
