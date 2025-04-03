@@ -30,8 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto, Long userId) {
 
         //로그인한 유저의 정보 가져오기
-        User loginUser = userRepository.findById(userId).
-                orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User loginUser = userRepository.findByIdOrElseThrow(userId);
 
         Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents(), loginUser);
         Schedule savedSchedule = scheduleRepository.save(schedule);
@@ -49,8 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     //일정 단일 조회
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(()->new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
 
         return new ScheduleResponseDto(schedule.getId(),
                 schedule.getTitle(),
@@ -65,10 +63,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
 
-        List<ScheduleResponseDto> scheduleList = scheduleRepository.findAll().stream()
-                .map(ScheduleResponseDto::toDto)
+        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::toDto)
                 .toList();
-        return scheduleList;
     }
 
 
@@ -78,31 +74,22 @@ public class ScheduleServiceImpl implements ScheduleService{
     public ScheduleResponseDto updateSchedule(Long id,ScheduleRequestDto requestDto, Long userId) {
 
         //id값에 해당하는 일정 데이터 가져오기
-        Schedule savedSchedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-
-        //로그인한 유저의 데이터 가져오기
-        User loginUser = userRepository.findById(userId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Schedule savedSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
         //로그인한 유저와 작성자가 동일하지 않을 경우 에러 출력
-        if(!loginUser.getId().equals(savedSchedule.getUser().getId())){
+        if(!userId.equals(savedSchedule.getUser().getId())){
             throw new CustomException(ErrorCode.MISMATCH_USER);
         }
 
         savedSchedule.updateSchedule(requestDto.getTitle(), requestDto.getContents());
 
 
-        //최신 데이터 조회
-        Schedule updatedSchedule = scheduleRepository.findById(savedSchedule.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
-
-        return new ScheduleResponseDto(updatedSchedule.getId(),
-                updatedSchedule.getTitle(),
-                updatedSchedule.getContents(),
-                updatedSchedule.getUser().getUsername(),
-                updatedSchedule.getCreatedAt(),
-                updatedSchedule.getUpdatedAt()
+        return new ScheduleResponseDto(savedSchedule.getId(),
+                savedSchedule.getTitle(),
+                savedSchedule.getContents(),
+                savedSchedule.getUser().getUsername(),
+                savedSchedule.getCreatedAt(),
+                savedSchedule.getUpdatedAt()
 
         );
     }
@@ -112,8 +99,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void deleteSchedule(LoginResponseDto loginUser, Long id) {
 
         //id값에 해당하는 일정 데이터 가져오기
-        Schedule savedSchedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule savedSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
         //로그인한 유저와 작성자가 동일하지 않을 경우 에러 출력
         if(!loginUser.getId().equals(savedSchedule.getUser().getId())){

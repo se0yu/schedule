@@ -1,15 +1,14 @@
 package com.example.schedule.service;
 
+import com.example.schedule.config.PasswordEncoder;
 import com.example.schedule.dto.*;
 import com.example.schedule.entity.User;
 import com.example.schedule.exception.CustomException;
 import com.example.schedule.exception.ErrorCode;
 import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -21,13 +20,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //회원가입
     @Override
     @Transactional
     public SignUpResponseDto signUp(String username, String email, String password){
 
-        User user = new User(username,email, password);
+        String hashedPassword = passwordEncoder.encode(password);
+        User user = new User(username,email, hashedPassword);
         User savedUser = userRepository.save(user);
 
         return new SignUpResponseDto(savedUser.getId(),
@@ -40,9 +41,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public LoginResponseDto login(LoginRequestDto requestDto) {
 
-        //일치하는 아이디, 비밀번호 없을 경우 오류
-        User user = userRepository.findByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword())
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"아이디와 비밀번호를 다시 확인해주세요."));
+        //일치하는 아이디가 없을 경우 오류
+        User user = userRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
+        }
 
         return new LoginResponseDto(user.getId(),user.getUsername());
     }
@@ -52,8 +57,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponseDto findUserById(Long id) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByIdOrElseThrow(id);
 
         return new UserResponseDto(user.getId(),user.getUsername(), user.getEmail(),user.getCreatedAt(),user.getUpdatedAt());
     }
@@ -63,13 +67,12 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public UserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto) {
         //해당 유저 데이터 존재 여부 확인&불러오기
-        User savedUser = userRepository.findById(id)
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        User savedUser = userRepository.findByIdOrElseThrow(id);
 
-        savedUser.updateUser(requestDto.getUsername(),requestDto.getEmail(),requestDto.getPassword());
+        String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
+        savedUser.updateUser(requestDto.getUsername(),requestDto.getEmail(),hashedPassword);
 
-        User updatedUser = userRepository.findById(savedUser.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User updatedUser = userRepository.findByIdOrElseThrow(savedUser.getId());
 
         return new UserResponseDto(updatedUser.getId(),
                 updatedUser.getUsername(),
@@ -89,10 +92,11 @@ public class UserServiceImpl implements UserService{
         }
 
         User user = optionalUser.get();
-        if(!password.equals(user.getPassword())){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }
 
         userRepository.delete(user);
     }
+
 }
