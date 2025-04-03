@@ -34,7 +34,7 @@ public class CommentController {
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
         CommentResponseDto responseDto = commentService.saveComment(scheduleId,loginUser.getId(),requsetDto);
 
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     //댓글 전체 조회 기능
@@ -44,4 +44,20 @@ public class CommentController {
         List<CommentResponseDto> responseDto = commentService.findAllSchedules();
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
+    //댓글 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<CommentResponseDto> updateComment(
+            @PathVariable Long scheduleId,
+            @PathVariable Long id,
+            HttpServletRequest httpServletRequest,
+            @Valid @RequestBody CommentRequestDto requestDto
+    ){
+        LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
+
+        CommentResponseDto responseDto = commentService.updateComment(scheduleId, id ,loginUser.getId(), requestDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
 }

@@ -7,6 +7,8 @@ import com.example.schedule.comment.repository.CommentRepository;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.entity.User;
+import com.example.schedule.exception.CustomException;
+import com.example.schedule.exception.ErrorCode;
 import com.example.schedule.repository.ScheduleRepository;
 import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +53,23 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public CommentResponseDto updateComment(Long schedlueId, CommentRequestDto requestDto, Long userId) {
-        return null;
+    @Transactional
+    public CommentResponseDto updateComment(Long schedlueId,Long commentId,Long userId,CommentRequestDto requestDto) {
+
+        Comment savedComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        //로그인한 유저와 작성자가 동일하지 않을 경우 에러 출력
+        if(!userId.equals(savedComment.getUser().getId())){
+            throw new CustomException(ErrorCode.MISMATCH_USER);
+        }
+        savedComment.updateComment(requestDto.getContent());
+        return new CommentResponseDto(savedComment.getId(),
+                                    savedComment.getSchedule().getId(),
+                                    savedComment.getUser().getUsername(),
+                                    savedComment.getContent(),
+                                    savedComment.getCreatedAt(),
+                                    savedComment.getUpdatedAt()
+                );
     }
 
     @Override

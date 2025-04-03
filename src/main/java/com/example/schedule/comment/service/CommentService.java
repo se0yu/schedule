@@ -12,7 +12,7 @@ public interface CommentService {
 
     List<CommentResponseDto> findAllSchedules();
 
-    CommentResponseDto updateComment(Long schedlueId, CommentRequestDto requestDto, Long userId);
+    CommentResponseDto updateComment(Long schedlueId, Long id,Long userId,CommentRequestDto requestDto);
 
     void deleteComment(LoginResponseDto loginUser, Long id);
 }
