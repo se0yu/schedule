@@ -1,5 +1,6 @@
 package com.example.schedule.comment.dto;
 
+import com.example.schedule.comment.entity.Comment;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,4 +26,14 @@ public class CommentResponseDto {
     private final LocalDateTime updatedAt;
 
 
+    public static CommentResponseDto toDto(Comment comment) {
+        return new CommentResponseDto(
+                comment.getId(),
+                comment.getSchedule().getId(),
+                comment.getUser().getUsername(),
+                comment.getContent(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()
+        );
+    }
 }
