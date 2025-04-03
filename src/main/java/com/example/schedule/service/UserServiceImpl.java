@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 //custom exception 만들것
@@ -50,6 +51,14 @@ public class UserServiceImpl implements UserService{
         }
 
         return new LoginResponseDto(user.getId(),user.getUsername());
+    }
+
+    //유저 전체 조회
+    @Override
+    public List<UserResponseDto> findAllUsers() {
+
+        return userRepository.findAll().stream().map(UserResponseDto::toDto)
+                .toList();
     }
 
 

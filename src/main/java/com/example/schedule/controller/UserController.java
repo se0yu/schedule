@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -63,6 +65,15 @@ public class UserController {
         SignUpResponseDto signUpResponseDto =
                 userService.signUp(requestDto);
         return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
+    }
+
+    //전체 유저 조회
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> findAllUser(){
+
+        List<UserResponseDto> userList = userService.findAllUsers();
+
+        return new ResponseEntity<>(userList,HttpStatus.OK);
     }
 
 
