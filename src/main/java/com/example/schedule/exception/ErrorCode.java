@@ -21,7 +21,7 @@ public enum ErrorCode {
 
     //schedule
     SCHEDULE_NOT_FOUND(404,"Not Found","S001","일정을 찾을 수 없습니다"),
-    MISMATCH_USER(403, "Mismatch User","S002", "작성자만 접근할 수 있습니다.");
+    MISMATCH_USER(403, "Mismatch User","S002", "접근 권한이 없습니다.");
 
 
     private final int status;

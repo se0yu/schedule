@@ -2,6 +2,8 @@ package com.example.schedule.controller;
 
 import com.example.schedule.common.Const;
 import com.example.schedule.dto.*;
+import com.example.schedule.exception.CustomException;
+import com.example.schedule.exception.ErrorCode;
 import com.example.schedule.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,10 +44,6 @@ public class UserController {
 
         HttpSession session = request.getSession(false);
 
-        //로그인 하지 않은 상태로 접근할 시 오류 출력
-//        if(session == null){
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
         //서버 세션 삭제
         session.invalidate();
 
@@ -94,7 +92,7 @@ public class UserController {
         //호출된 유저 정보와 로그인한 유저 정보가 일치하는지 확인
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
         if(!loginUser.getId().equals(id)){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            throw new CustomException(ErrorCode.MISMATCH_USER);
         }
 
         UserResponseDto userResponseDto = userService.updateUser(id,requestDto);

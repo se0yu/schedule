@@ -31,8 +31,6 @@ public class ScheduleController {
 
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
 
-
-
         ScheduleResponseDto responseDto= scheduleService.saveSchedule(requestDto,loginUser.getId());
             return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
