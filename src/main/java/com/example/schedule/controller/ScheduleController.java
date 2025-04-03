@@ -1,18 +1,20 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.common.Const;
-import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.LoginResponseDto;
+import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -37,9 +39,12 @@ public class ScheduleController {
 
     //일정 전체 조회
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(){
-
-        List<ScheduleResponseDto> responseDto = scheduleService.findAllSchedules();
+    public ResponseEntity<Page<ScheduleResponseDto>> findAllSchedules(
+             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("updatedAt").descending());
+        Page<ScheduleResponseDto> responseDto = scheduleService.findAllSchedules(pageable);
 
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }

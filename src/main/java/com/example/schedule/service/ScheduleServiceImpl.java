@@ -10,10 +10,10 @@ import com.example.schedule.exception.ErrorCode;
 import com.example.schedule.repository.ScheduleRepository;
 import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,10 +61,10 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     //일정 전체 조회
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
+    public Page<ScheduleResponseDto> findAllSchedules(Pageable pageable) {
 
-        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::toDto)
-                .toList();
+        Page<Schedule> schedulePage = scheduleRepository.findAll(pageable);
+        return schedulePage.map(ScheduleResponseDto::toDto);
     }
 
 

@@ -3,14 +3,14 @@ package com.example.schedule.service;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ScheduleService {
 
     ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto, Long userId);
 
-    List<ScheduleResponseDto> findAllSchedules();
+    Page<ScheduleResponseDto> findAllSchedules(Pageable pageable);
 
     ScheduleResponseDto findScheduleById(Long id);
 
