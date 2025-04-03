@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 @AllArgsConstructor
 public class LoginRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "이메일 입력은 필수입니다.")
     private final String email;
 
     @NotNull
