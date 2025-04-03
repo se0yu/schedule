@@ -2,7 +2,6 @@ package com.example.schedule.comment.service;
 
 import com.example.schedule.comment.dto.CommentRequestDto;
 import com.example.schedule.comment.dto.CommentResponseDto;
-import com.example.schedule.dto.LoginResponseDto;
 
 import java.util.List;
 
@@ -14,5 +13,5 @@ public interface CommentService {
 
     CommentResponseDto updateComment(Long schedlueId, Long id,Long userId,CommentRequestDto requestDto);
 
-    void deleteComment(LoginResponseDto loginUser, Long id);
+    void deleteComment(Long loginUserId, Long id);
 }

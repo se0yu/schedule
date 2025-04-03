@@ -4,7 +4,6 @@ import com.example.schedule.comment.dto.CommentRequestDto;
 import com.example.schedule.comment.dto.CommentResponseDto;
 import com.example.schedule.comment.entity.Comment;
 import com.example.schedule.comment.repository.CommentRepository;
-import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.entity.User;
 import com.example.schedule.exception.CustomException;
@@ -73,7 +72,15 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void deleteComment(LoginResponseDto loginUser, Long id) {
+    @Transactional
+    public void deleteComment(Long loginUserId, Long commentId) {
 
+        Comment savedComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        //로그인한 유저와 작성자가 동일하지 않을 경우 에러 출력
+        if(!loginUserId.equals(savedComment.getUser().getId())){
+            throw new CustomException(ErrorCode.MISMATCH_USER);
+        }
+        commentRepository.deleteById(commentId);
     }
 }

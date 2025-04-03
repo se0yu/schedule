@@ -60,4 +60,14 @@ public class CommentController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComment(
+            HttpServletRequest httpServletRequest,
+            @PathVariable Long id
+    ){
+        LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
+
+        commentService.deleteComment(loginUser.getId(),id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
