@@ -19,7 +19,7 @@ public class ScheduleResponseDto {
     //TimeStamp -> yyyy-mm-dd 형식의 String으로 반환
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private final LocalDateTime createdAt;
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private final LocalDateTime updatedAt;
 
     public static ScheduleResponseDto toDto(Schedule schedule) {
