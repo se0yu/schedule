@@ -6,6 +6,7 @@ import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> saveSchedule (
             HttpServletRequest httpServletRequest,
-            @RequestBody ScheduleRequestDto requestDto
+            @Valid @RequestBody ScheduleRequestDto requestDto
             ){
 
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
@@ -60,10 +61,9 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponseDto> upadateSchedule(
             HttpServletRequest httpServletRequest,
             @PathVariable Long id,
-            @RequestBody ScheduleRequestDto requestDto
+            @Valid @RequestBody ScheduleRequestDto requestDto
     ){
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
-
 
         ScheduleResponseDto responseDto= scheduleService.updateSchedule(id,requestDto,loginUser.getId());
         return new ResponseEntity<>(responseDto,HttpStatus.OK);

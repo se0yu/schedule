@@ -1,13 +1,13 @@
 package com.example.schedule.filter;
 
 import com.example.schedule.common.Const;
+import com.example.schedule.exception.CustomException;
+import com.example.schedule.exception.ErrorCode;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.PatternMatchUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -40,7 +40,7 @@ public class LoginFilter implements Filter {
 
 
             if (session == null || session.getAttribute(Const.LOGIN_USER) == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"로그인이 필요한 기능입니다.");
+                throw new CustomException(ErrorCode.NOT_LOGIN);
             }
 
         }

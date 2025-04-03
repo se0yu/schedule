@@ -2,6 +2,8 @@ package com.example.schedule.service;
 
 import com.example.schedule.dto.*;
 import com.example.schedule.entity.User;
+import com.example.schedule.exception.CustomException;
+import com.example.schedule.exception.ErrorCode;
 import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto findUserById(Long id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 아이디입니다."));
+                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return new UserResponseDto(user.getId(),user.getUsername(), user.getEmail(),user.getCreatedAt(),user.getUpdatedAt());
     }
@@ -62,15 +64,18 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto) {
         //해당 유저 데이터 존재 여부 확인&불러오기
         User savedUser = userRepository.findById(id)
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"아이디와 비밀번호를 다시 확인해주세요."));
+                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
 
         savedUser.updateUser(requestDto.getUsername(),requestDto.getEmail(),requestDto.getPassword());
 
-        return new UserResponseDto(savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt());
+        User updatedUser = userRepository.findById(savedUser.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return new UserResponseDto(updatedUser.getId(),
+                updatedUser.getUsername(),
+                updatedUser.getEmail(),
+                updatedUser.getCreatedAt(),
+                updatedUser.getUpdatedAt());
     }
 
     //회원탈퇴
@@ -80,12 +85,12 @@ public class UserServiceImpl implements UserService{
 
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 아이디입니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         User user = optionalUser.get();
         if(!password.equals(user.getPassword())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"비밀번호가 틀렸습니다.");
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }
 
         userRepository.delete(user);

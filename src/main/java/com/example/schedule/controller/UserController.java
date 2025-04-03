@@ -60,7 +60,7 @@ public class UserController {
 
     //회원가입 기능
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
 
         SignUpResponseDto signUpResponseDto =
                 userService.signUp(
@@ -89,7 +89,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> updateUserById(
             HttpServletRequest httpServletRequest,
             @PathVariable Long id,
-            @RequestBody UpdateUserRequestDto requestDto
+            @Valid @RequestBody UpdateUserRequestDto requestDto
     ){
         //호출된 유저 정보와 로그인한 유저 정보가 일치하는지 확인
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
