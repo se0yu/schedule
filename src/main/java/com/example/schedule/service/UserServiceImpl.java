@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService{
     //회원가입
     @Override
     @Transactional
-    public SignUpResponseDto signUp(String username, String email, String password){
+    public SignUpResponseDto signUp(SignUpRequestDto requestDto){
 
-        String hashedPassword = passwordEncoder.encode(password);
-        User user = new User(username,email, hashedPassword);
+        String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
+        User user = new User(requestDto.getUsername(), requestDto.getEmail(), hashedPassword);
         User savedUser = userRepository.save(user);
 
         return new SignUpResponseDto(savedUser.getId(),
@@ -59,7 +59,11 @@ public class UserServiceImpl implements UserService{
 
         User user = userRepository.findByIdOrElseThrow(id);
 
-        return new UserResponseDto(user.getId(),user.getUsername(), user.getEmail(),user.getCreatedAt(),user.getUpdatedAt());
+        return new UserResponseDto(user.getId(),
+                                    user.getUsername(),
+                                    user.getEmail(),
+                                    user.getCreatedAt(),
+                                    user.getUpdatedAt());
     }
 
     //유저 정보 수정

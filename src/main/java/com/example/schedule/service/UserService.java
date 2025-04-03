@@ -4,7 +4,7 @@ import com.example.schedule.dto.*;
 
 public interface UserService {
 
-    SignUpResponseDto signUp(String username, String email, String password);
+    SignUpResponseDto signUp(SignUpRequestDto requestDto);
 
     LoginResponseDto login(LoginRequestDto requestDto);
 
