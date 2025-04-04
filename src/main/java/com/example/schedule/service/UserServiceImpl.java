@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
 
         //일치하는 아이디가 없을 경우 오류
         User user = userRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(()->new CustomException(ErrorCode.USER_LOGIN_FAIL));
 
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
             throw new CustomException(ErrorCode.WRONG_PASSWORD);
