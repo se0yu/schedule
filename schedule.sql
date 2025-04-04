@@ -16,7 +16,7 @@ CREATE TABLE user(
 );
 
 
-CREATE TABLE comments(
+CREATE TABLE comment(
                          id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '댓글 식별자',
                          content TEXT COMMENT '댓글 내용'
 );
