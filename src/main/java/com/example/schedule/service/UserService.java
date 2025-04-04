@@ -1,6 +1,7 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.*;
+import com.example.schedule.entity.User;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ public interface UserService {
 
     void signOut(Long id, String password);
 
-    UserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto);
+    User updateUser(Long id, UpdateUserRequestDto requestDto);
 }

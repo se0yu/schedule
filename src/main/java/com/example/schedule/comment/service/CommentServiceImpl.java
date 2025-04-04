@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     @Transactional
-    public CommentResponseDto updateComment(Long schedlueId,Long commentId,Long userId,CommentRequestDto requestDto) {
+    public Comment updateComment(Long schedlueId,Long commentId,Long userId,CommentRequestDto requestDto) {
 
         Comment savedComment = commentRepository.findByIdOrElseThrow(commentId);
 
@@ -66,13 +66,7 @@ public class CommentServiceImpl implements CommentService{
             throw new CustomException(ErrorCode.MISMATCH_USER);
         }
         savedComment.updateComment(requestDto.getContent());
-        return new CommentResponseDto(savedComment.getId(),
-                                    savedComment.getSchedule().getId(),
-                                    savedComment.getUser().getUsername(),
-                                    savedComment.getContent(),
-                                    savedComment.getCreatedAt(),
-                                    savedComment.getUpdatedAt()
-                );
+        return savedComment;
     }
 
     @Override

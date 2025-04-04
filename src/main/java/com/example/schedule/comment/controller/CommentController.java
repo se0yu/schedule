@@ -3,6 +3,7 @@ package com.example.schedule.comment.controller;
 
 import com.example.schedule.comment.dto.CommentRequestDto;
 import com.example.schedule.comment.dto.CommentResponseDto;
+import com.example.schedule.comment.entity.Comment;
 import com.example.schedule.comment.service.CommentService;
 import com.example.schedule.common.Const;
 import com.example.schedule.dto.LoginResponseDto;
@@ -56,8 +57,8 @@ public class CommentController {
             @Valid @RequestBody CommentRequestDto requestDto
     ){
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
-
-        CommentResponseDto responseDto = commentService.updateComment(scheduleId, id ,loginUser.getId(), requestDto);
+        Comment updatedComment = commentService.updateComment(scheduleId, id ,loginUser.getId(), requestDto);
+        CommentResponseDto responseDto = CommentResponseDto.toDto(updatedComment);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

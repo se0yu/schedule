@@ -78,20 +78,14 @@ public class UserServiceImpl implements UserService{
     //유저 정보 수정
     @Override
     @Transactional
-    public UserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto) {
+    public User updateUser(Long id, UpdateUserRequestDto requestDto) {
         //해당 유저 데이터 존재 여부 확인&불러오기
         User savedUser = userRepository.findByIdOrElseThrow(id);
 
         String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
         savedUser.updateUser(requestDto.getUsername(),requestDto.getEmail(),hashedPassword);
-        userRepository.flush();
-        User udatedUser = userRepository.findByIdOrElseThrow(id);
 
-        return new UserResponseDto(udatedUser.getId(),
-                udatedUser.getUsername(),
-                udatedUser.getEmail(),
-                udatedUser.getCreatedAt(),
-                udatedUser.getUpdatedAt());
+        return savedUser;
     }
 
     //회원탈퇴

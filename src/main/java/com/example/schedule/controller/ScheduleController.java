@@ -4,6 +4,7 @@ import com.example.schedule.common.Const;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
+import com.example.schedule.entity.Schedule;
 import com.example.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -67,8 +68,8 @@ public class ScheduleController {
             @Valid @RequestBody ScheduleRequestDto requestDto
     ){
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
-
-        ScheduleResponseDto responseDto= scheduleService.updateSchedule(id,requestDto,loginUser.getId());
+        Schedule updateSchedule = scheduleService.updateSchedule(id, requestDto, loginUser.getId());
+        ScheduleResponseDto responseDto= ScheduleResponseDto.toDto(updateSchedule);
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 

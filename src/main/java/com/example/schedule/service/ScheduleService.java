@@ -3,6 +3,7 @@ package com.example.schedule.service;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
+import com.example.schedule.entity.Schedule;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +15,7 @@ public interface ScheduleService {
 
     ScheduleResponseDto findScheduleById(Long id);
 
-    ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, Long userId);
+    Schedule updateSchedule(Long id, ScheduleRequestDto requestDto, Long userId);
 
     void deleteSchedule(LoginResponseDto loginUser, Long id);
 }

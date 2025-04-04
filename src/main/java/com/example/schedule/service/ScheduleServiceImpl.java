@@ -58,7 +58,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     //일정 수정
     @Override
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id,ScheduleRequestDto requestDto, Long userId) {
+    public Schedule updateSchedule(Long id,ScheduleRequestDto requestDto, Long userId) {
 
         //id값에 해당하는 일정 데이터 가져오기
         Schedule savedSchedule = scheduleRepository.findByIdOrElseThrow(id);
@@ -69,10 +69,8 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
 
         savedSchedule.updateSchedule(requestDto.getTitle(), requestDto.getContents());
-        scheduleRepository.flush();
-        Schedule updatedSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        return ScheduleResponseDto.toDto(updatedSchedule);
+        return savedSchedule;
     }
 
     @Override

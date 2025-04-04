@@ -2,6 +2,7 @@ package com.example.schedule.controller;
 
 import com.example.schedule.common.Const;
 import com.example.schedule.dto.*;
+import com.example.schedule.entity.User;
 import com.example.schedule.exception.CustomException;
 import com.example.schedule.exception.ErrorCode;
 import com.example.schedule.service.UserService;
@@ -101,8 +102,8 @@ public class UserController {
         if(!loginUser.getId().equals(id)){
             throw new CustomException(ErrorCode.MISMATCH_USER);
         }
-
-        UserResponseDto userResponseDto = userService.updateUser(id,requestDto);
+        User updatedUser = userService.updateUser(id,requestDto);
+        UserResponseDto userResponseDto = UserResponseDto.toDto(updatedUser);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
