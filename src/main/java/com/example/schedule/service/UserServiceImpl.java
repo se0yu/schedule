@@ -84,14 +84,14 @@ public class UserServiceImpl implements UserService{
 
         String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
         savedUser.updateUser(requestDto.getUsername(),requestDto.getEmail(),hashedPassword);
+        userRepository.flush();
+        User udatedUser = userRepository.findByIdOrElseThrow(id);
 
-        User updatedUser = userRepository.findByIdOrElseThrow(savedUser.getId());
-
-        return new UserResponseDto(updatedUser.getId(),
-                updatedUser.getUsername(),
-                updatedUser.getEmail(),
-                updatedUser.getCreatedAt(),
-                updatedUser.getUpdatedAt());
+        return new UserResponseDto(udatedUser.getId(),
+                udatedUser.getUsername(),
+                udatedUser.getEmail(),
+                udatedUser.getCreatedAt(),
+                udatedUser.getUpdatedAt());
     }
 
     //회원탈퇴

@@ -35,28 +35,15 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents(), loginUser);
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(savedSchedule.getId(),
-                                            savedSchedule.getTitle(),
-                                            savedSchedule.getContents(),
-                                            savedSchedule.getUser().getUsername(),
-                                            savedSchedule.getCreatedAt(),
-                                            savedSchedule.getUpdatedAt()
-
-        );
+        return ScheduleResponseDto.toDto(savedSchedule);
     }
 
     //일정 단일 조회
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
-        Schedule schedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule savedSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        return new ScheduleResponseDto(schedule.getId(),
-                schedule.getTitle(),
-                schedule.getContents(),
-                schedule.getUser().getUsername(),
-                schedule.getCreatedAt(),
-                schedule.getUpdatedAt()
-        );
+        return ScheduleResponseDto.toDto(savedSchedule);
     }
 
     //일정 전체 조회
@@ -82,16 +69,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
 
         savedSchedule.updateSchedule(requestDto.getTitle(), requestDto.getContents());
+        scheduleRepository.flush();
+        Schedule updatedSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-
-        return new ScheduleResponseDto(savedSchedule.getId(),
-                savedSchedule.getTitle(),
-                savedSchedule.getContents(),
-                savedSchedule.getUser().getUsername(),
-                savedSchedule.getCreatedAt(),
-                savedSchedule.getUpdatedAt()
-
-        );
+        return ScheduleResponseDto.toDto(updatedSchedule);
     }
 
     @Override
