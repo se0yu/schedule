@@ -39,9 +39,11 @@ public class CommentController {
 
     //댓글 전체 조회 기능
     @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> findAllComments(){
+    public ResponseEntity<List<CommentResponseDto>> findAllComments(
+            @PathVariable Long scheduleId
+    ){
 
-        List<CommentResponseDto> responseDto = commentService.findAllSchedules();
+        List<CommentResponseDto> responseDto = commentService.findAllComments(scheduleId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 

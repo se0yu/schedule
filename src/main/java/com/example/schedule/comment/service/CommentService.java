@@ -9,7 +9,7 @@ public interface CommentService {
 
     CommentResponseDto saveComment(Long scheduleId, Long loginUserId, CommentRequestDto requestDto);
 
-    List<CommentResponseDto> findAllSchedules();
+    List<CommentResponseDto> findAllComments(Long scheduleId);
 
     CommentResponseDto updateComment(Long schedlueId, Long id,Long userId,CommentRequestDto requestDto);
 

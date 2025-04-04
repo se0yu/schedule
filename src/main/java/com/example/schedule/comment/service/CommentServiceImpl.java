@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,10 +46,13 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<CommentResponseDto> findAllSchedules() {
+    public List<CommentResponseDto> findAllComments(Long scheduleId) {
 
-        return commentRepository.findAll().stream().map(CommentResponseDto::toDto)
-                .toList();
+        List<Comment> comments = commentRepository.findByScheduleId(scheduleId);
+
+        return comments.stream()
+                .map(CommentResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
