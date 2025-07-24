@@ -1,4 +1,4 @@
-package com.example.schedule.exception;
+package com.example.schedule.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

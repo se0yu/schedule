@@ -1,15 +1,21 @@
-package com.example.schedule.filter;
+package com.example.schedule.common.filter;
+
+import java.io.IOException;
+
+import org.springframework.util.PatternMatchUtils;
 
 import com.example.schedule.common.Const;
-import com.example.schedule.exception.CustomException;
-import com.example.schedule.exception.ErrorCode;
-import jakarta.servlet.*;
+import com.example.schedule.common.exception.CustomException;
+import com.example.schedule.common.exception.ErrorCode;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.util.PatternMatchUtils;
-
-import java.io.IOException;
 
 
 public class LoginFilter implements Filter {

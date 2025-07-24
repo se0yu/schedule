@@ -1,6 +1,6 @@
 package com.example.schedule.domain.user.service;
 
-import com.example.schedule.config.PasswordEncoder;
+import com.example.schedule.common.config.PasswordEncoder;
 import com.example.schedule.domain.user.dto.LoginRequestDto;
 import com.example.schedule.domain.user.dto.LoginResponseDto;
 import com.example.schedule.domain.user.dto.SignUpRequestDto;
@@ -8,8 +8,8 @@ import com.example.schedule.domain.user.dto.SignUpResponseDto;
 import com.example.schedule.domain.user.dto.UpdateUserRequestDto;
 import com.example.schedule.domain.user.dto.UserResponseDto;
 import com.example.schedule.domain.user.entity.User;
-import com.example.schedule.exception.CustomException;
-import com.example.schedule.exception.ErrorCode;
+import com.example.schedule.common.exception.CustomException;
+import com.example.schedule.common.exception.ErrorCode;
 import com.example.schedule.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

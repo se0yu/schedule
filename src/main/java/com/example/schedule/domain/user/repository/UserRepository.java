@@ -1,8 +1,8 @@
 package com.example.schedule.domain.user.repository;
 
 import com.example.schedule.domain.user.entity.User;
-import com.example.schedule.exception.CustomException;
-import com.example.schedule.exception.ErrorCode;
+import com.example.schedule.common.exception.CustomException;
+import com.example.schedule.common.exception.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
