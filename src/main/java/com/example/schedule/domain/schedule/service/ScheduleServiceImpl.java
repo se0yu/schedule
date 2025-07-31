@@ -42,7 +42,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     //일정 단일 조회
     @Override
-    public ScheduleResponseDto findScheduleById(Long id) {
+    public ScheduleResponseDto findScheduleById(Long id, Long userId) {
         Schedule savedSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
         return ScheduleResponseDto.toDto(savedSchedule);

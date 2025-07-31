@@ -67,9 +67,12 @@ public class ScheduleController {
 
     //일정 단일 조회
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id){
-
-        ScheduleResponseDto responseDto = scheduleService.findScheduleById(id);
+    public ResponseEntity<ScheduleResponseDto> findScheduleById(
+        @PathVariable Long id,
+        HttpServletRequest httpServletRequest
+    ){
+        LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
+        ScheduleResponseDto responseDto = scheduleService.findScheduleById(id, loginUser.getId());
 
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }

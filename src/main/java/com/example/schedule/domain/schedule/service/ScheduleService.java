@@ -14,7 +14,7 @@ public interface ScheduleService {
 
     Page<ScheduleResponseDto> findAllSchedules(Pageable pageable, Long userId);
 
-    ScheduleResponseDto findScheduleById(Long id);
+    ScheduleResponseDto findScheduleById(Long id, Long userId);
 
     Schedule updateSchedule(Long id, ScheduleRequestDto requestDto, Long userId);
 
