@@ -28,6 +28,8 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
+    private Boolean completed = false;
 
     public Schedule(String title, String contents, User user) {
         this.title = title;

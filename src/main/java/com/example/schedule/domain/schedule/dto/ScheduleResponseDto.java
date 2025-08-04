@@ -1,11 +1,12 @@
 package com.example.schedule.domain.schedule.dto;
 
+import java.time.LocalDateTime;
+
 import com.example.schedule.domain.schedule.entity.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -15,6 +16,7 @@ public class ScheduleResponseDto {
     private final String title;
     private final String contents;
     private final String username;
+    private final boolean completed;
 
     //TimeStamp -> yyyy-mm-dd 형식의 String으로 반환
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -30,6 +32,7 @@ public class ScheduleResponseDto {
                                         schedule.getTitle(),
                                         schedule.getContents(),
                                         schedule.getUser().getUsername(),
+                                        schedule.getCompleted(),
                                         schedule.getCreatedAt(),
                                         schedule.getUpdatedAt()
                 );
