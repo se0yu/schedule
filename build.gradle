@@ -47,6 +47,15 @@ dependencies {
             "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/generated/sources/annotationProcessor/java/main"
+        }
+    }
+}
+
+
 tasks.named('test') {
     useJUnitPlatform()
 }
