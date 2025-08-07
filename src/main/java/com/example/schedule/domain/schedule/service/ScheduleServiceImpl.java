@@ -9,6 +9,7 @@ import com.example.schedule.common.exception.CustomException;
 import com.example.schedule.common.exception.ErrorCode;
 import com.example.schedule.domain.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.domain.schedule.dto.ScheduleResponseDto;
+import com.example.schedule.domain.schedule.dto.ScheduleSearchDto;
 import com.example.schedule.domain.schedule.entity.Schedule;
 import com.example.schedule.domain.schedule.repository.ScheduleRepository;
 import com.example.schedule.domain.user.dto.LoginResponseDto;
@@ -88,4 +89,11 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
         scheduleRepository.deleteById(id);
     }
+
+    @Override
+    public Page<ScheduleResponseDto> searchSchedules(Pageable pageable, ScheduleSearchDto scheduleSearchDto) {
+        Page<Schedule> schedulePage = scheduleRepository.searchSchedule(scheduleSearchDto, pageable);
+        return schedulePage.map(ScheduleResponseDto::toDto);
+    }
+
 }
