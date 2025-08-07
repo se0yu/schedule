@@ -8,7 +8,7 @@ import com.example.schedule.common.exception.CustomException;
 import com.example.schedule.common.exception.ErrorCode;
 import com.example.schedule.domain.schedule.entity.Schedule;
 
-public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+public interface ScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleSearch {
     default Schedule findByIdOrElseThrow(Long id){
         return findById(id)
                 .orElseThrow(()->new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
