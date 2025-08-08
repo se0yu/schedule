@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.schedule.common.Const;
 import com.example.schedule.domain.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.domain.schedule.dto.ScheduleResponseDto;
+import com.example.schedule.domain.schedule.dto.ScheduleSearchDto;
 import com.example.schedule.domain.schedule.entity.Schedule;
 import com.example.schedule.domain.schedule.service.ScheduleService;
 import com.example.schedule.domain.user.dto.LoginResponseDto;
@@ -99,6 +101,15 @@ public class ScheduleController {
         LoginResponseDto loginUser = (LoginResponseDto) httpServletRequest.getSession().getAttribute(Const.LOGIN_USER);
 
         scheduleService.deleteSchedule(loginUser,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ScheduleResponseDto>> searchSchedule(
+        @ModelAttribute ScheduleSearchDto scheduleSearchDto,
+        Pageable pageable
+    ){
+        scheduleService.searchSchedules(pageable, scheduleSearchDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
