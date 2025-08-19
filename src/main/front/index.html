@@ -1,10 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Schedule 관리</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1e293b; color: #f8fafc; padding: 20px; }
+        h1 { margin-bottom: 10px; }
+        .top-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        input, textarea, button, select {
+            padding: 6px 8px; border-radius: 4px; border: 1px solid #334155; background: #0f172a; color: #f8fafc;
+        }
+        button { cursor: pointer; }
+        .card { background: #0f172a; padding: 10px; border: 1px solid #334155; border-radius: 8px; margin-bottom: 10px; }
+        .card h3 { margin: 0; }
+        .small { font-size: 12px; color: #94a3b8; }
+        .actions { margin-top: 10px; display: flex; gap: 5px; }
+        .modal-bg { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; }
+        .modal { background: #0f172a; padding: 20px; border-radius: 8px; width: 300px; }
+    </style>
 </head>
 <body>
+
+<h1>Schedule 관리</h1>
+
+<div class="top-bar">
+    <input id="token" placeholder="JWT 토큰 (Bearer)">
+    <button onclick="loadSchedules()">새로고침</button>
+    <button onclick="openModal()">새 일정</button>
+    <input id="search" placeholder="검색" oninput="renderSchedules()">
+    <select id="pageSize" onchange="changePageSize()">
+        <option value="5">5 / page</option>
+        <option value="10" selected>10 / page</option>
+        <option value="20">20 / page</option>
+    </select>
+</div>
+
+<div id="list"></div>
+<div style="margin-top: 10px;">
+    <button onclick="prevPage()">이전</button>
+    <span id="pageNum">1</span>
+    <button onclick="nextPage()">다음</button>
+</div>
+
+<div class="modal-bg" id="modalBg">
+    <div class="modal">
+        <h3 id="modalTitle">새 일정</h3>
+        <input id="titleInput" placeholder="제목"><br><br>
+        <textarea id="contentsInput" placeholder="내용"></textarea><br><br>
+        <button onclick="saveSchedule()">저장</button>
+        <button onclick="closeModal()">취소</button>
+    </div>
+</div>
+
+<script>
+    const API_BASE = ""; // 예: "http://localhost:8080"
+    const SCHEDULES_PATH = "/api/v1/schedules";
+    let schedules = [];
+    let editingId = null;
+    let page = 0;
+    let pageSize = 10;
+
+    function api(path, method = "GET", body) {
+        const token = document.getElementById("token").value.trim();
+        return fetch(API_BASE + path, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            body: body ? JSON.stringify(body) : undefined
+        }).then(res => {
+            if (!res.ok) throw new Error(res.statusText);
+            return res.json();
+        });
+    }
+
+    function loadSchedules() {
+        api(SCHEDULES_PATH).then(data => {
+            schedules = Array.isArray(data) ? data : data.content;
+            renderSchedules();
+        }).catch(e => alert("에러: " + e.message));
+    }
+
+    function renderSchedules() {
+        const q = document.getElementById("search").value.toLowerCase();
+        const filtered = schedules.filter(s => s.title.toLowerCase().includes(q) || s.contents.toLowerCase().includes(q));
+        const start = page * pageSize;
+        const current = filtered.slice(start, start + pageSize);
+        const list = document.getElementById("list");
+        list.innerHTML = "";
+        current.forEach(s => {
+            const div = document.createElement("div");
+            div.className = "card";
+            div.innerHTML = `
+        <h3>${s.title}</h3>
+        <p>${s.contents}</p>
+        <div class="small">생성: ${new Date(s.createdAt).toLocaleString()}</div>
+        <div class="small">수정: ${new Date(s.updatedAt).toLocaleString()}</div>
+        <div class="actions">
+          <button onclick="editSchedule(${s.id})">수정</button>
+          <button onclick="deleteSchedule(${s.id})">삭제</button>
+        </div>
+      `;
+            list.appendChild(div);
+        });
+        document.getElementById("pageNum").textContent = page + 1;
+    }
+
+    function openModal(id) {
+        document.getElementById("modalBg").style.display = "flex";
+        if (id) {
+            const s = schedules.find(x => x.id === id);
+            document.getElementById("modalTitle").textContent = "일정 수정";
+            document.getElementById("titleInput").value = s.title;
+            document.getElementById("contentsInput").value = s.contents;
+            editingId = id;
+        } else {
+            document.getElementById("modalTitle").textContent = "새 일정";
+            document.getElementById("titleInput").value = "";
+            document.getElementById("contentsInput").value = "";
+            editingId = null;
+        }
+    }
+
+    function closeModal() {
+        document.getElementById("modalBg").style.display = "none";
+    }
+
+    function saveSchedule() {
+        const title = document.getElementById("titleInput").value;
+        const contents = document.getElementById("contentsInput").value;
+        if (editingId) {
+            api(`${SCHEDULES_PATH}/${editingId}`, "PUT", { title, contents }).then(loadSchedules);
+        } else {
+            api(SCHEDULES_PATH, "POST", { title, contents }).then(loadSchedules);
+        }
+        closeModal();
+    }
+
+    function editSchedule(id) {
+        openModal(id);
+    }
+
+    function deleteSchedule(id) {
+        if (confirm("삭제하시겠습니까?")) {
+            api(`${SCHEDULES_PATH}/${id}`, "DELETE").then(loadSchedules);
+        }
+    }
+
+    function prevPage() {
+        if (page > 0) {
+            page--;
+            renderSchedules();
+        }
+    }
+    function nextPage() {
+        page++;
+        renderSchedules();
+    }
+
+    function changePageSize() {
+        pageSize = parseInt(document.getElementById("pageSize").value);
+        page = 0;
+        renderSchedules();
+    }
+
+    loadSchedules();
+</script>
 
 </body>
 </html>
